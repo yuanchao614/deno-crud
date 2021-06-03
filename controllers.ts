@@ -1,4 +1,4 @@
-import { MongoClient } from "https://deno.land/x/mongo@v0.22.0/mod.ts";
+import { MongoClient, Bson  } from "https://deno.land/x/mongo@v0.22.0/mod.ts";
 import { User } from './interface.ts'
 const URI = "mongodb://127.0.0.1:27017";
 
@@ -54,15 +54,15 @@ const addUser = async ({
 // DESC: GET single user
 // METHOD: GET /api/user/:id
 // mongodb _id is Symbol type in deno so getUserById can't find data
-const getUserByName = async ({
+const getUserById = async ({
     params,
     response,
 }: {
-    params: { userName: string };
+    params: { id: string };
     response: any;
 }) => {
     // Searches for a particular user in the DB
-    const findData = await usersCollection.findOne({ userName: params.userName });
+    const findData = await usersCollection.findOne({ _id: new Bson.ObjectID(params.id) });
     console.log(params);
 
     console.log(findData);
@@ -125,11 +125,11 @@ const updateUser = async ({
         const body = await request.body();
         const userValue = await body.value;
         await usersCollection.updateOne(
-            { _id: params.id },
+            { _id: new Bson.ObjectID(params.id) },
             { $set: userValue }
         );
         // Respond with the Updated user
-        const updatedUser = await usersCollection.findOne({ _id: params.id });
+        const updatedUser = await usersCollection.findOne({ _id: new Bson.ObjectID(params.id) });
         response.status = 200;
         response.body = {
             success: true,
@@ -154,7 +154,7 @@ const deleteUser = async ({
     response: any;
 }) => {
     try {
-        await usersCollection.deleteOne({ _id: params.id });
+        await usersCollection.delete({ _id: new Bson.ObjectID(params.id) });
         response.status = 201;
         response.body = {
             success: true,
@@ -169,5 +169,5 @@ const deleteUser = async ({
 };
 
 export {
-    addUser, getUserByName, getUserList, updateUser, deleteUser
+    addUser, getUserById, getUserList, updateUser, deleteUser
 }

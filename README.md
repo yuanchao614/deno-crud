@@ -73,6 +73,6 @@ url:
 http://localhost:3000/api/user/:id
 
 ```
-* deleteUser
 
+[https://deno.land/x/mongo@v0.22.0](https://deno.land/x/mongo@v0.22.0)
 [https://dev.to/nakshcodes/create-your-first-restful-api-with-deno-oak-and-mongodb-48a7](https://dev.to/nakshcodes/create-your-first-restful-api-with-deno-oak-and-mongodb-48a7)
